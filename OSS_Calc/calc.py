@@ -5,7 +5,7 @@ class Calculator:
     def __init__(self, root):
         self.root = root
         self.root.title("계산기")
-        self.root.geometry("300x600")
+        self.root.geometry("300x670")  # 높이 조금 증가
 
         self.expression = ""
         self.exchange_rate = 910  # 1 AUD = 910 KRW
@@ -35,7 +35,7 @@ class Calculator:
                 )
                 btn.pack(side="left", expand=True, fill="both")
 
-        # 환율 버튼 추가 (AUD → KRW, KRW → AUD)
+        # 환율 버튼
         rate_frame = tk.Frame(root)
         rate_frame.pack(expand=True, fill="both")
 
@@ -67,7 +67,7 @@ class Calculator:
         )
         btn_lotto.pack(side="left", expand=True, fill="both")
 
-        # 로또 결과 출력 라벨
+        # 로또 출력 라벨
         self.lotto_result = tk.Label(
             root,
             text="",
@@ -76,6 +76,28 @@ class Calculator:
             anchor="nw"
         )
         self.lotto_result.pack(fill="both", padx=10, pady=10)
+
+        # ⬇️ 연봉 환산 버튼 추가
+        salary_frame = tk.Frame(root)
+        salary_frame.pack(expand=True, fill="both")
+
+        btn_salary = tk.Button(
+            salary_frame,
+            text="연봉 환산",
+            font=("Arial", 14),
+            command=self.convert_salary
+        )
+        btn_salary.pack(side="left", expand=True, fill="both")
+
+        # ⬇️ 연봉 환산 결과 출력 라벨
+        self.salary_result = tk.Label(
+            root,
+            text="",
+            font=("Arial", 12),
+            justify="left",
+            anchor="nw"
+        )
+        self.salary_result.pack(fill="both", padx=10, pady=10)
 
     def on_click(self, char):
         if char == 'C':
@@ -117,3 +139,14 @@ class Calculator:
             numbers = sorted(random.sample(range(1, 46), 6))
             lines.append(f"{numbers}")
         self.lotto_result.config(text="\n".join(lines))
+
+    # ⬇️ 연봉 환산 로직
+    def convert_salary(self):
+        try:
+            salary = float(self.entry.get())
+            monthly = salary / 12
+            hourly = monthly / 209  # 월 근로시간 209시간 기준
+            result = f"월급: {round(monthly):,}원\n시급: {round(hourly, 2):,}원"
+            self.salary_result.config(text=result)
+        except ValueError:
+            self.salary_result.config(text="숫자를 입력해주세요.")
