@@ -1,10 +1,11 @@
 import tkinter as tk
+import random
 
 class Calculator:
     def __init__(self, root):
         self.root = root
         self.root.title("계산기")
-        self.root.geometry("300x500")
+        self.root.geometry("300x600")
 
         self.expression = ""
         self.exchange_rate = 910  # 1 AUD = 910 KRW
@@ -54,6 +55,28 @@ class Calculator:
         )
         btn_krw_to_aud.pack(side="left", expand=True, fill="both")
 
+        # 로또 번호 생성 버튼
+        lotto_frame = tk.Frame(root)
+        lotto_frame.pack(expand=True, fill="both", pady=(10, 0))
+
+        btn_lotto = tk.Button(
+            lotto_frame,
+            text="로또 번호 생성",
+            font=("Arial", 14),
+            command=self.generate_lotto_numbers
+        )
+        btn_lotto.pack(side="left", expand=True, fill="both")
+
+        # 로또 결과 출력 라벨
+        self.lotto_result = tk.Label(
+            root,
+            text="",
+            font=("Arial", 12),
+            justify="left",
+            anchor="nw"
+        )
+        self.lotto_result.pack(fill="both", padx=10, pady=10)
+
     def on_click(self, char):
         if char == 'C':
             self.expression = ""
@@ -87,3 +110,10 @@ class Calculator:
         except ValueError:
             self.entry.delete(0, tk.END)
             self.entry.insert(tk.END, "에러")
+
+    def generate_lotto_numbers(self):
+        lines = []
+        for _ in range(3):
+            numbers = sorted(random.sample(range(1, 46), 6))
+            lines.append(f"{numbers}")
+        self.lotto_result.config(text="\n".join(lines))
